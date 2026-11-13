@@ -22,6 +22,30 @@ const BookLoans = (() => {
     };
   }
 
+  function validate(form, messages) {
+    const values = {};
+    let firstInvalid;
+
+    for (const [name, message] of Object.entries(messages)) {
+      const input = form.elements.namedItem(name);
+      const value = input.value.trim();
+      const invalid = !value || !input.validity.valid;
+      const error = form.querySelector("#" + input.id + "-error");
+
+      error.textContent = invalid ? message : "";
+      input.setAttribute("aria-invalid", String(invalid));
+      if (invalid && !firstInvalid) firstInvalid = input;
+      values[name] = value;
+    }
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return null;
+    }
+
+    return values;
+  }
+
   function load(storage) {
     const saved = storage.getItem(storageKey);
     if (saved === null) return [];
@@ -34,7 +58,7 @@ const BookLoans = (() => {
     storage.setItem(storageKey, JSON.stringify(loans));
   }
 
-  return { status, summary, load, save };
+  return { status, summary, validate, load, save };
 })();
 
 function startLoanTracker() {
@@ -43,6 +67,14 @@ function startLoanTracker() {
   const total = document.querySelector("#total-loans");
   const overdue = document.querySelector("#overdue-loans");
   const storageError = document.querySelector("#storage-error");
+  const messages = {
+    title: "Enter the book title.",
+    author: "Enter the author's name.",
+    borrower: "Enter the borrower's name.",
+    dueDate: "Enter a valid due date.",
+    genre: "Enter the book genre."
+  };
+
   let loans;
 
   try {
@@ -114,10 +146,18 @@ function startLoanTracker() {
     });
   }
 
+  form.addEventListener("input", event => {
+    const input = event.target;
+    if (input.getAttribute("aria-invalid") === "true" && input.value.trim() && input.validity.valid) {
+      input.setAttribute("aria-invalid", "false");
+      form.querySelector("#" + input.id + "-error").textContent = "";
+    }
+  });
+
   form.addEventListener("submit", event => {
     event.preventDefault();
-    const values = Object.fromEntries(new FormData(form));
-    if (saveLoans([...loans, { ...values, returned: false }])) form.reset();
+    const values = BookLoans.validate(form, messages);
+    if (values && saveLoans([...loans, { ...values, returned: false }])) form.reset();
   });
 
   document.addEventListener("visibilitychange", () => {
