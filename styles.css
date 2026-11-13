@@ -100,3 +100,30 @@ td:nth-child(4), td:nth-child(7) { white-space: nowrap; }
   .container { padding: 1.5rem 0; }
   .form-grid { grid-template-columns: 1fr; }
 }
+
+/* Tabs and their selected state. */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab {
+  padding: .7rem 1rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.tab:hover, .tab[aria-selected="true"] {
+  color: var(--accent);
+}
+
+.tab[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+}
