@@ -1,1 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Lending Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <h1>Book Lending Tracker</h1>
+      <p>Keep track of the books you lend and when they’re due.</p>
+    </header>
+
+    <section class="summary" aria-label="Loan summary" aria-live="polite">
+      <div class="card metric">
+        <span>Total loans</span>
+        <strong id="total-loans">0</strong>
+      </div>
+      <div class="card metric metric-overdue">
+        <span>Overdue loans</span>
+        <strong id="overdue-loans">0</strong>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="form-heading">
+      <h2 id="form-heading">Add a loan</h2>
+      <form id="loan-form" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="title">Title</label>
+            <input id="title" name="title" required aria-describedby="title-error">
+            <p class="error" id="title-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="author">Author</label>
+            <input id="author" name="author" required aria-describedby="author-error">
+            <p class="error" id="author-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="borrower">Borrower</label>
+            <input id="borrower" name="borrower" required aria-describedby="borrower-error">
+            <p class="error" id="borrower-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="due-date">Due date</label>
+            <input id="due-date" name="dueDate" type="date" required aria-describedby="due-date-error">
+            <p class="error" id="due-date-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="genre">Genre</label>
+            <input id="genre" name="genre" required aria-describedby="genre-error">
+            <p class="error" id="genre-error" aria-live="polite"></p>
+          </div>
+        </div>
+        <button class="button" type="submit">Add loan</button>
+      </form>
+      <p class="error" id="storage-error" role="alert"></p>
+    </section>
+
+    <section class="card" aria-labelledby="table-heading">
+      <h2 id="table-heading">Loan history</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-labelledby="table-heading">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Author</th>
+              <th scope="col">Borrower</th>
+              <th scope="col">Due date</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="loan-rows">
+            <tr><td class="empty-state" colspan="7">No loans yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
 
